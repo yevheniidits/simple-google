@@ -4,12 +4,12 @@ import setuptools
 
 
 setuptools.setup(
-    name='simple-google-services',
+    name='sgs',
     version='0.0.1',
     license='MIT',
     author='Yevhenii Dits',
     author_email='yevheniidits@gmail.com',
-    description='Simplifies interaction with Google API in the most frequently used tasks.',
+    description='Simple Google Services. Simplifies interaction with Google API in the most frequently used tasks.',
     packages=setuptools.find_packages(),
     zip_safe=False,
     install_requires=(
