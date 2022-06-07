@@ -11,8 +11,6 @@ class Youtube(YoutubeService):
         Available action sections:
             my_channel
     """
-    __slots__ = ('_channel_response', '_channel')
-
     def __init__(self):
         super().__init__()
         self._channel_response = None
@@ -39,3 +37,10 @@ class Youtube(YoutubeService):
                 self._channel.playlist_id = item['contentDetails']['relatedPlaylists']['uploads']
                 return self._channel
         return self._channel
+
+    def like_video(self, video_id: str):
+        self.service.videos().rate(id=video_id, rating='like').execute()
+
+    def dislike_video(self, video_id: str):
+        self.service.videos().rate(id=video_id, rating='dislike').execute()
+
