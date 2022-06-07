@@ -12,13 +12,14 @@ pip install git+https://git@github.com/yevheniidits/simple-google.git
 
 ## Requirements
 
-1. Create project at Google CLoud Platform, enable APIs, save `client_secret.json` . More details 
+1. Python 3.8
+2. Create project at Google CLoud Platform, enable APIs, save `client_secret.json` . More details 
 how to [create project](https://developers.google.com/workspace/guides/create-project) and [credentials](https://developers.google.com/workspace/guides/create-credentials).
-2. Set path to `client_secret.json`:
+3. Set path to `client_secret.json`:
 - (recommended) as env variable `SGS_CLIENTSECRET`
 - copy file to `~/.sgs/client_secret.json`
 - set manually `from sgs import config` `config.client_secret_file = 'path to client_secret.json file'`
-3. Set full config or make separate configurations manually (config structure must be in `{"key": "value", ...}` format):
+4. Set full config or make separate configurations manually (config structure must be in `{"key": "value", ...}` format):
 - (recommended) set path to `config.json` file as env variable `SGS_CONFIGFILE`
 - copy `config.json` file to `~/.sgs/config.json`
 - set manually `from sgs import config` `config.config_dict = {"key": "value", ...}`
