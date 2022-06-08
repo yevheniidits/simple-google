@@ -8,16 +8,18 @@ from os.path import join, expanduser, exists
 
 class Config:
 
-    _config_file = None
-    _config_dict = None
-    _local_config_file = join(expanduser('~'), '.sgs', 'config.json')
-    _env_config_key = 'SGS_CONFIGFILE'
+    def __init__(self):
+        self._config_file = None
+        self._config_dict = None
+        self._local_config_file = join(expanduser('~'), '.sgs', 'config.json')
+        self._env_config_key = 'SGS_CONFIGFILE'
 
-    _client_secret_file = None
-    _local_client_secret_file = join(expanduser('~'), '.sgs', 'client_secret.json')
-    _env_client_secret_key = 'SGS_CLIENTSECRET'
+        self._client_secret_file = None
+        self._local_client_secret_file = join(expanduser('~'), '.sgs', 'client_secret.json')
+        self._env_client_secret_key = 'SGS_CLIENTSECRET'
 
-    _scopes = []
+        self._scopes = {}
+        self._project_scopes = []
 
     @property
     def config_file(self):
@@ -80,24 +82,40 @@ class Config:
     @property
     def scopes(self):
         if not self._scopes:
-            config_file_scopes = self.config_dict.get('scopes', None)
+            config_file_scopes = self.config_dict.get('scopes', {})
             if not config_file_scopes:
                 raise Exception(
                     """Can`t read scopes from config."""
-                    """\nPlease do one of the following:"""
-                    """\n1. Scopes config structure must be {"scopes": ["scope_1", "scope_2", ...]}"""
+                    """\nPlease do one of the following"""
+                    """\n(replace "service" with service name e.g. "youtube", "drive" etc.):"""
+                    """\n1. Scopes config structure must be {"scopes": {"service": ["scope_1", "scope_2", ...]}, ...}"""
                     """\n2. Set scopes manually"""
                     """\n\tfrom sgs import config"""
-                    """\n\tconfig.scopes = ["scope_1", "scope_2", ...]"""
+                    """\n\tconfig.scopes["service"] = ["scope_1", "scope_2", ...]"""
                 )
-            self._scopes.extend(config_file_scopes)
+            for service, scopes in config_file_scopes.items():
+                self._scopes[service] = scopes
+                self._scopes[service] = list(set(self._scopes[service]))
         return self._scopes
 
     @scopes.setter
-    def scopes(self, scopes: list):
-        for scope in scopes:
-            if not isinstance(scope, str):
+    def scopes(self, scopes: dict):
+        for service, scope in scopes.items():
+            if not isinstance(scope, list):
                 raise TypeError('Scopes must be list of strings')
         self._scopes = scopes
+
+    @property
+    def project_scopes(self):
+        self._project_scopes = list(set(self._project_scopes))
+        return self._project_scopes
+
+    @project_scopes.setter
+    def project_scopes(self, scopes: list):
+        self._project_scopes.extend(scopes)
+
+    @project_scopes.deleter
+    def project_scopes(self):
+        self._project_scopes = []
 
     get = config_dict
