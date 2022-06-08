@@ -13,6 +13,7 @@ from sgs import config
 class YoutubeService:
 
     def __init__(self):
+        config.project_scopes = config.scopes['youtube']
         self._service = None
 
     @property
@@ -21,7 +22,7 @@ class YoutubeService:
         Create Resource object for interacting with Youtube API
         """
         if not self._service:
-            account = Account(config.client_secret_file, config.scopes)
+            account = Account(config.client_secret_file, config.project_scopes)
             self._service = GoogleServices(account).youtube()
         return self._service
 
