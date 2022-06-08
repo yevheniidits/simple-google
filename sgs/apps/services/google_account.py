@@ -45,3 +45,6 @@ class GoogleServices:
 
     def youtube(self):
         return build('youtube', 'v3', credentials=self.get_credentials(), cache_discovery=False)
+
+    def drive(self):
+        return build('drive', 'v3', credentials=self.get_credentials(), cache_discovery=False)
