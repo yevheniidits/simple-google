@@ -13,17 +13,14 @@ class Youtube(YoutubeService):
     """
     def __init__(self):
         super().__init__()
-        self._channel_response = None
         self._channel = None
 
     @property
-    def channel_response(self) -> dict:
+    def _channel_response(self) -> dict:
         """
         API response as dictionary with full data about authenticated user`s channel.
         """
-        if not self._channel_response:
-            self._channel_response = self.service.channels().list(mine=True, part='contentDetails').execute()['items']
-        return self._channel_response
+        return self.service.channels().list(mine=True, part='contentDetails').execute()['items']
 
     @property
     def my_channel(self):
@@ -32,7 +29,7 @@ class Youtube(YoutubeService):
         authenticated user`s channel, uploaded videos, comments etc.
         """
         if not self._channel:
-            for item in self.channel_response:
+            for item in self._channel_response:
                 self._channel = Channel(item['id'])
                 self._channel.playlist_id = item['contentDetails']['relatedPlaylists']['uploads']
                 return self._channel
